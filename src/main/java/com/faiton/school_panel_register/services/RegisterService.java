@@ -1,6 +1,5 @@
 package com.faiton.school_panel_register.services;
 
-
 import com.faiton.school_panel_register.entities.ConfirmationToken;
 import com.faiton.school_panel_register.entities.User;
 import com.faiton.school_panel_register.repositories.UserRepository;
@@ -10,8 +9,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import lombok.NoArgsConstructor;
 
 @Service
+@NoArgsConstructor
 public class RegisterService {
 
   @Autowired
@@ -26,9 +27,9 @@ public class RegisterService {
   @Autowired
   private EmailSenderService emailSenderService;
 
-
   public User registerUser(User user) {
-
+    System.out.println("crypt:");
+    System.out.println(bCryptPasswordEncoder);
     final String password = bCryptPasswordEncoder.encode(user.getPassword());
 
     user.setPassword(password);
@@ -67,9 +68,11 @@ public class RegisterService {
 
     String message = "Thank you for registering. ";
     message += " Please Click the link below to confirm your account.";
-    message += "http://localhost:8080/sign-up/confirm?token="+ token;
+    message += "http://localhost:9010/confirm-registration/" + token;
 
     email.setText(message);
+
+    // final EmailSenderService emailSenderService = new EmailSenderService();
 
     emailSenderService.sendEmail(email);
   }

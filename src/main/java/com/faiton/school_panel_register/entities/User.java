@@ -175,4 +175,32 @@ public class User implements UserDetails {
     this.enabled = enabled;
   }
 
+/**
+ * @return the name
+ */
+public String getName() {
+	return name;
+}
+
+/**
+ * @param name the name to set
+ */
+public void setName(String name) {
+	this.name = name;
+}
+
+/**
+ * @return the locked
+ */
+public Boolean getLocked() {
+	return locked;
+}
+
+/**
+ * @param locked the locked to set
+ */
+public void setLocked(Boolean locked) {
+	this.locked = locked;
+}
+
 }

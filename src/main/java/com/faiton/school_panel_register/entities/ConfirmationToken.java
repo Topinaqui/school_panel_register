@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 @Entity
 public class ConfirmationToken {
 
+  
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
@@ -95,11 +97,24 @@ public void setUser(User user) {
  * @param createdDate
  * @param user
  */
-public ConfirmationToken(Long id, String confirmationToken, LocalDate createdDate, User user) {
+public ConfirmationToken(Long id, String token, LocalDate createdDate, User user) {
 	this.id = id;
-	this.confirmationToken = confirmationToken;
+	this.token = token;
 	this.createdDate = createdDate;
 	this.user = user;
+}
+
+/**
+ * @param id
+ * @param token
+ * @param createdDate
+ * @param user
+ */
+public ConfirmationToken() {
+	this.id = 0L;
+	this.token = "";
+	this.createdDate = null;
+	this.user = null;
 }
 
 
