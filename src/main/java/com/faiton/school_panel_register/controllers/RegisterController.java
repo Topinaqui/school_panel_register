@@ -3,11 +3,13 @@ package com.faiton.school_panel_register.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.function.Function;
 
 import com.faiton.school_panel_register.entities.SystemInfo;
@@ -33,19 +35,26 @@ public class RegisterController {
 
   @PostMapping("/register")
   public User register(@RequestBody User user) {
-    System.out.println("User password:");
-    System.out.println(user.getPassword());
-
     User registredUser = registerService.registerUser(user);
 
     return registredUser;
   }
 
-  // @GetMapping("/confirm-registration/:{token}")
-  // public void confirmRegistration(@PathVariable String token) {
+  @GetMapping("/confirm-registration/{token}")
+  public HashMap<String, String> confirmRegistration(@PathVariable String token) {
 
-  // registerService.confirmRegistration(token);
-  // }
+    Boolean confirmed = registerService.confirmRegistration(token);
+
+    HashMap<String, String> message = new HashMap<>();
+
+    if (confirmed == true) {
+      message.put("message", "Your registration was confirmed!");
+    } else {
+      message.put("message", "Sorry, your registration was not confirmed, try again later.");
+    }
+
+    return message;
+  }
 
   @PostMapping("/info")
   public String info() {
@@ -71,11 +80,9 @@ public class RegisterController {
 
       return okMessage;
     } catch (Exception e) {
-
-      // System.out.println(e.getStackTrace());
       System.out.println(e.getMessage());
 
-      return e.getMessage() + " - " + info.getVersion();
+      return e.getMessage() + " - System version: " + info.getVersion();
     }
   }
 

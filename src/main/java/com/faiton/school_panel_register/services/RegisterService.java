@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import lombok.NoArgsConstructor;
 
 @Service
@@ -28,8 +29,7 @@ public class RegisterService {
   private EmailSenderService emailSenderService;
 
   public User registerUser(User user) {
-    System.out.println("crypt:");
-    System.out.println(bCryptPasswordEncoder);
+
     final String password = bCryptPasswordEncoder.encode(user.getPassword());
 
     user.setPassword(password);
@@ -45,18 +45,30 @@ public class RegisterService {
     return user;
   }
 
-  public void confirmRegistration(String token) {
+  public Boolean confirmRegistration(String token) {
 
     ConfirmationToken confToken = confirmationTokenService.findConfirmationToken(token);
 
-    User user = confToken.getUser();
+    try {
+      User user = confToken.getUser();
 
-    user.setEnabled(true);
+      System.out.println("user: ");
+      System.out.println(user);
 
-    confirmationTokenService.deleteConfirmationToken(confToken.getId());
+      user.setEnabled(true);
 
-    userRepository.save(user);
+      confirmationTokenService.deleteConfirmationToken(confToken.getId());
 
+      userRepository.save(user);
+
+    } catch (Exception e) {
+
+      e.printStackTrace();
+
+      return false;
+    }
+
+    return true;
   }
 
   public void sendConfirmationMail(String userMail, String token) {
@@ -64,7 +76,7 @@ public class RegisterService {
     final SimpleMailMessage email = new SimpleMailMessage();
     email.setTo(userMail);
     email.setSubject("School Panel - Confirmation Link");
-    email.setFrom("<MAIL>");
+    email.setFrom("faiton@live.com");
 
     String message = "Thank you for registering. ";
     message += " Please Click the link below to confirm your account.";

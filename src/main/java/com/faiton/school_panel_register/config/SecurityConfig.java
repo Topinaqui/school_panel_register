@@ -13,7 +13,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     http.authorizeRequests().antMatchers(HttpMethod.POST, "/info/**").permitAll()
         .antMatchers(HttpMethod.POST, "/registre/**").permitAll().antMatchers(HttpMethod.GET, "/hello/**").permitAll()
-        .and().csrf().disable();
+        .antMatchers(HttpMethod.GET, "/confirm-registration/**").permitAll().and().csrf().disable();
   }
 
 }

@@ -1,7 +1,9 @@
 package com.faiton.school_panel_register.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,7 +17,6 @@ import javax.persistence.GenerationType;
 
 @Entity
 public class User implements UserDetails {
-
 
   private static final long serialVersionUID = 91812214244341405L;
 
@@ -33,30 +34,45 @@ public class User implements UserDetails {
 
   private String password;
 
-  private String userRole;
+  private String role = "USER";
 
-  private Boolean expired;
+  private ArrayList<String> authorities;
 
   private Boolean enabled = false;
 
-  private Boolean locked;
+  private Boolean accountNonLocked = true;
+
+  private Boolean accountNonExpired = true;
+
+  private Boolean credentialsNonExpired = true;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
 
-    final SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(userRole);
+    // final SimpleGrantedAuthority simpleGrantedAuthority = new
+    // SimpleGrantedAuthority(role);
 
-    return Collections.singletonList(simpleGrantedAuthority);
+    List<SimpleGrantedAuthority> list = new ArrayList<>();
+
+    for (String authority : authorities) {
+
+      list.add(new SimpleGrantedAuthority(authority));
+
+    }
+
+    // return Collections.singletonList(simpleGrantedAuthority);
+
+    return list;
   }
 
-  @Override
+  // @Override
   public String getPassword() {
     return password;
   }
 
   /**
-  * @param password the password to set
-  */
+   * @param password the password to set
+   */
   public void setPassword(String password) {
     this.password = password;
   }
@@ -66,141 +82,132 @@ public class User implements UserDetails {
   }
 
   /**
-  * @param username the username to set
-  */
+   * @param username the username to set
+   */
   public void setUsername(String username) {
     this.username = username;
   }
 
+  @Override
   public boolean isAccountNonExpired() {
-    return expired;
+    return accountNonExpired;
   }
 
-  @Override
+  // @Override
   public boolean isEnabled() {
     return enabled;
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return !locked;
+    return accountNonLocked;
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return !expired;
+    return !credentialsNonExpired;
   }
 
+  // public boolean isExpired() {
+  // return !expired;
+  // }
+
   /**
-  * @return the id
-  */
+   * @return the id
+   */
   public Long getId() {
     return id;
   }
 
   /**
-  * @param id the id to set
-  */
+   * @param id the id to set
+   */
   public void setId(Long id) {
     this.id = id;
   }
 
   /**
-  * @return the surname
-  */
+   * @return the surname
+   */
   public String getSurname() {
     return surname;
   }
 
   /**
-  * @param surname the surname to set
-  */
+   * @param surname the surname to set
+   */
   public void setSurname(String surname) {
     this.surname = surname;
   }
 
   /**
-  * @return the email
-  */
+   * @return the email
+   */
   public String getEmail() {
     return email;
   }
 
   /**
-  * @param email the email to set
-  */
+   * @param email the email to set
+   */
   public void setEmail(String email) {
     this.email = email;
   }
 
   /**
-  * @return the userRole
-  */
-  public String getUserRole() {
-    return userRole;
+   * @return the role
+   */
+  public String getRole() {
+    return role;
   }
 
   /**
-  * @param userRole the userRole to set
-  */
-  public void setUserRole(String userRole) {
-    this.userRole = userRole;
+   * @param role the role to set
+   */
+  public void setRole(String role) {
+    this.role = role;
   }
 
   /**
-  * @return the expired
-  */
+   * @return the expired
+   */
   public Boolean getExpired() {
     return expired;
   }
 
   /**
-  * @param expired the expired to set
-  */
+   * @param expired the expired to set
+   */
   public void setExpired(Boolean expired) {
     this.expired = expired;
   }
 
   /**
-  * @return the enabled
-  */
+   * @return the enabled
+   */
   public Boolean getEnabled() {
     return enabled;
   }
 
   /**
-  * @param enabled the enabled to set
-  */
+   * @param enabled the enabled to set
+   */
   public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
 
-/**
- * @return the name
- */
-public String getName() {
-	return name;
-}
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-/**
- * @param name the name to set
- */
-public void setName(String name) {
-	this.name = name;
-}
-
-/**
- * @return the locked
- */
-public Boolean getLocked() {
-	return locked;
-}
-
-/**
- * @param locked the locked to set
- */
-public void setLocked(Boolean locked) {
-	this.locked = locked;
-}
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
 }
