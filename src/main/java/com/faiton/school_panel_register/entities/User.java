@@ -2,7 +2,6 @@ package com.faiton.school_panel_register.entities;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -11,6 +10,8 @@ import javax.persistence.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.Builder.Default;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,19 +39,20 @@ public class User implements UserDetails {
 
   private ArrayList<String> authorities;
 
+  @Default
   private Boolean enabled = false;
 
+  @Default
   private Boolean accountNonLocked = true;
 
+  @Default
   private Boolean accountNonExpired = true;
 
+  @Default
   private Boolean credentialsNonExpired = true;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-
-    // final SimpleGrantedAuthority simpleGrantedAuthority = new
-    // SimpleGrantedAuthority(role);
 
     List<SimpleGrantedAuthority> list = new ArrayList<>();
 
@@ -59,8 +61,6 @@ public class User implements UserDetails {
       list.add(new SimpleGrantedAuthority(authority));
 
     }
-
-    // return Collections.singletonList(simpleGrantedAuthority);
 
     return list;
   }
@@ -105,7 +105,7 @@ public class User implements UserDetails {
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return !credentialsNonExpired;
+    return credentialsNonExpired;
   }
 
   // public boolean isExpired() {
@@ -166,20 +166,6 @@ public class User implements UserDetails {
    */
   public void setRole(String role) {
     this.role = role;
-  }
-
-  /**
-   * @return the expired
-   */
-  public Boolean getExpired() {
-    return expired;
-  }
-
-  /**
-   * @param expired the expired to set
-   */
-  public void setExpired(Boolean expired) {
-    this.expired = expired;
   }
 
   /**

@@ -32,29 +32,4 @@ public class UserService implements UserDetailsService {
     }
   }
 
-  // void registerUser(User user) {
-
-  //   final String encriptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-
-  //   user.setPassword(encriptedPassword);
-
-  //   final User createdUser = userRepository.save(user);
-
-  //   final ConfirmationToken confirmationToken = new ConfirmationToken(user);
-
-  //   confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-  // }
-
-  // void sendConfirmationMail(String userMail, String token) {
-
-  //   final SimpleMailMessage emailMessage = new SimpleMailMessage();
-  //   emailMessage.setTo(userMail);
-  //   emailMessage.setSubject("Mail Confirmation Link!");
-  //   emailMessage.setFrom("<MAIL>");
-  //   emailMessage.setText("Thank you for registering. Please click on the below link to activate your account." + "http://localhost:8080/sign-up/confirm?token="+ token);
-
-  //   emailSenderService.sendEmail(emailMessage);
-  // }
-
 }

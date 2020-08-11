@@ -2,6 +2,8 @@ package com.faiton.school_panel_register.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,9 @@ import com.faiton.school_panel_register.services.UserService;
 
 @RestController
 public class RegisterController {
+
+  @Autowired
+  private AuthenticationManager authenticationManager;
 
   @Autowired
   private SystemInfo info;
@@ -52,6 +57,16 @@ public class RegisterController {
     } else {
       message.put("message", "Sorry, your registration was not confirmed, try again later.");
     }
+
+    return message;
+  }
+
+  @PostMapping("/validate-register")
+  public HashMap<String, String> validateRegister(@RequestBody User user) {
+
+    HashMap<String, String> message = new HashMap<>();
+    message.put("message", "empty");
+    message.put("code", "0000");
 
     return message;
   }
