@@ -127,11 +127,11 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
         .map(GrantedAuthority::getAuthority)
         .collect(Collectors.toList()))
         .setIssuedAt(new Date(now))
-        .setExpiration(new Date(now + 30 * 1000))
+        .setExpiration(new Date(now + (24* 60 * 60 * 1000)))
         .signWith(SignatureAlgorithm.HS512, key.getBytes())
         .compact();
 
-    response.addHeader("Authentorization", "Bearer " + token);
+    response.addHeader("Authorization", "Bearer " + token);
   }
 
 }
