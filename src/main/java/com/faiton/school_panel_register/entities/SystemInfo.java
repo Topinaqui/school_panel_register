@@ -1,9 +1,13 @@
 package com.faiton.school_panel_register.entities;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class SystemInfo {
 
+  @Value("${app.config.system.version:1.0.0}")
   private String version;
 
+  @Value("${app.config.system.version-name:Canary}")
   private String versionName;
 
   /**
@@ -15,7 +19,10 @@ public class SystemInfo {
     this.versionName = versionName;
   }
 
-  /**
+  public SystemInfo() {
+}
+
+/**
    * @return the version
    */
   public String getVersion() {

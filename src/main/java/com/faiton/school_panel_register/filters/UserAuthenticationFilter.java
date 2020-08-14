@@ -9,7 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.faiton.school_panel_register.config.JWTConfig;
+import com.faiton.school_panel_register.config.AppConfig;
 import com.faiton.school_panel_register.entities.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,7 +33,8 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
   @Autowired
   private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  private JWTConfig jwtConfig = new JWTConfig();
+  @Autowired
+  private AppConfig appConfig;
 
   private DaoAuthenticationProvider authenticationProvider;
 
@@ -54,26 +55,10 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
 
     try {
 
-      System.out.println("... blue");
-
       User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
 
       username = user.getUsername();
       password = user.getPassword();
-
-      // System.out.println(request.getAttributeNames());
-
-      // Map<String, String[]> attrs = request.getParameterMap();
-
-      // Set<String> keys = attrs.keySet();
-
-      // System.out.println(keys);
-
-      // keys.forEach((String key) -> {
-      // System.out.println(key);
-      // });
-
-      // System.out.println("--------------------------------------------------------");
 
     } catch (Exception e) {
 
@@ -89,9 +74,8 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
     }
 
     username = username.trim();
-    // $2a$10$kLCItJf5V9r06AlKwbxkmuznvfsrqxpuxIohSs.tXWlGfnrMX1MHa
-    System.out.println(username + " - " + password);
-    // System.out.println("Password " + bCryptPasswordEncoder.encode(password));
+
+    System.out.println(username);
 
     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 
@@ -102,7 +86,7 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
     try {
       auth = authManager.authenticate(authenticationToken);
 
-      System.out.println("is: " + auth.isAuthenticated());
+      System.out.println("Is authenticated: " + auth.isAuthenticated());
 
       return auth;
     } catch (Exception e) {
@@ -118,7 +102,7 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
       Authentication authResult) throws IOException, ServletException {
     // super.successfulAuthentication(request, response, chain, authResult);
 
-    String key = "$2a$10$kLCItJf5V9r06AlKwbxkmuznvfsrqxpuxIohSs.tXWlGfnrMX1MHa";
+    String key = appConfig.getAppKey();
 
     Long now = System.currentTimeMillis();
     String token = Jwts.builder().setSubject(authResult.getName())
@@ -127,11 +111,11 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
         .map(GrantedAuthority::getAuthority)
         .collect(Collectors.toList()))
         .setIssuedAt(new Date(now))
-        .setExpiration(new Date(now + (24* 60 * 60 * 1000)))
+        .setExpiration(new Date(now + (appConfig.getTokenExpiration() * 1000)))
         .signWith(SignatureAlgorithm.HS512, key.getBytes())
         .compact();
 
-    response.addHeader("Authorization", "Bearer " + token);
+    response.addHeader(appConfig.getAuthorizationHeader(), appConfig.getJwtPrefix() + token);
   }
 
 }

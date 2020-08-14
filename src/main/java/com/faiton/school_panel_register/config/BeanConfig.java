@@ -12,13 +12,19 @@ public class BeanConfig {
   @Bean
   public SystemInfo systemInfo() {
 
-    return new SystemInfo("1.0.0", "Canary");
+    return new SystemInfo();
   }
 
   @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder() {
 
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public AppConfig appConfig() {
+
+    return new AppConfig();
   }
 
 }
